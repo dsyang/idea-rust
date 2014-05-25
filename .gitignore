@@ -1,6 +1,8 @@
 /.idea
 /out
 /src/java/gen
+/gen
 *.iml
+*.swp
 .settings
 .project

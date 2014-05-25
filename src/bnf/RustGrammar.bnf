@@ -5,21 +5,22 @@
 	psiImplClassSuffix="Impl"
 	psiPackage="vektah.rust.psi"
 	psiImplPackage="vektah.rust.psi.impl"
+	psiImplUtilClass="vektah.rust.psi.impl.RustPsiImplUtil"
 
 	elementTypeHolderClass="vektah.rust.psi.RustTokens"
 	elementTypeClass="vektah.rust.psi.RustTokenType"
 	tokenTypeClass="vektah.rust.psi.RustTokenType"
 
-	tokenTypeClass("keyword")="vektah.rust.psi.RustKeywordTokenType"
+	extends("ident")="vektah.rust.psi.impl.RustNamedElementImpl"
+	implements("ident")="vektah.rust.psi.RustNamedElement"
 
-	extends(".*_item")=item
 	extends("expr_.*")=expr
 	extends("block_.*")=expr_block
 	extends("struct_body_.*")=struct_body
 	extends("enum_variant_.*")=enum_variant
 	extends(".*_match_pattern")=match_pattern
 	extends("let_.*_bind")=let_bind
-	extends("fn_.*_bind")=fn_arg
+	extends("prototype_.*_arg")=prototype_arg
 	consumeTokenMethod("expr_.*|expr")="consumeTokenFast"
 
 	tokens = [
@@ -108,7 +109,7 @@
 
 file ::= mod_contents
 
-item ::= mod_item
+private item ::= mod_item
 	| fn_item
 	| type_item
 	| struct_item
@@ -124,6 +125,7 @@ private string_literal ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
 private literal ::= string_literal | numeric_literal | 'true' | 'false' | 'self' | unit
 private unit ::= ref? '(' ')'
 private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
+ident ::= IDENTIFIER {methods = [getNameIdentifier]}
 
 // Generic recovery predicates
 private not_open_brace ::= !'{'
@@ -351,7 +353,7 @@ private use_part ::= (IDENTIFIER | 'super' | 'self')
 
 // FUNCTIONS
 fn_item ::= (comment | attribute)* fn_declaration statement_block
-fn_declaration ::= visibility? 'unsafe'? 'fn' IDENTIFIER generic_params? fn_args ['->' return_type] {pin=3 recoverWhile="function_recover" }
+fn_declaration ::= visibility? 'unsafe'? 'fn' ident generic_params? fn_args ['->' return_type] {pin=3 recoverWhile="function_recover" }
 fn_args ::= '(' let_args ')'
 private return_type ::= type | '!'
 private function_recover ::= !('{'|';')
@@ -424,12 +426,12 @@ let ::= 'let' let_bind ['=' (expr | statement_block)] ';'?
 
 // let args are used by function and closure implementations and of course let. A single param here is considered a type
 let_args ::= [ let_bind ( ',' let_bind)* ','? ]
-let_bind ::= let_tuple_bind | let_struct_bind | let_variable_bind | let_unit_bind | let_self_arg
+let_bind ::= let_tuple_bind | let_struct_bind | let_variable_bind | let_unit_bind | let_self_bind
 let_variable_bind ::= variable_signature [':' type]
 let_tuple_bind ::= ref* type_basic? '(' let_bind (',' let_bind)* ','? ')' [':' type]
 let_struct_bind ::= type '{' struct_bind_member (',' struct_bind_member )* ','? '..'? ','? '}' [':' type]
 let_unit_bind ::= '(' ')'
-let_self_arg ::= ref? 'mut'? '~'? 'self'
+let_self_bind ::= ref? 'mut'? '~'? 'self'
 
 // Prototype args are used by closure definitions, externs and trait declarations of functions. A single param here is
 // considered an identifier
