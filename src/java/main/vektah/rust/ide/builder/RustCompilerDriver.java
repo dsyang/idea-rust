@@ -417,7 +417,7 @@ public class RustCompilerDriver {
 	}
 
 	private void saveAndCommit(boolean isUnitTestMode) {
-		// ensure the project model seen by build process is up-to-date
+		// ensure the project org.intellij.rust.jps.model seen by build process is up-to-date
 		myProject.save();
 		if (!isUnitTestMode) {
 			ApplicationManager.getApplication().saveSettings();

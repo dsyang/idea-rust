@@ -7,7 +7,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.util.SystemInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -56,13 +57,18 @@ public class RustSdkUtil {
 		return sdkData;
 	}
 
+    public static File getExecutable(@NotNull String path, @NotNull String command) {
+        return new File(path, SystemInfo.isWindows ? command + ".exe" : command);
+    }
+
+    @NotNull
+    public static File getCompilerBinary(@NotNull String sdkHome) {
+        return getExecutable(new File(sdkHome).getAbsolutePath(), "rustc");
+    }
+
 	public static RustSdkData testRustSdk(String path) {
-		File parent = new File(path);
-		if (!parent.exists()) {
-            LOG.error("Directory does not exist.");
-			return null;
-		}
-		File rustc = new File(parent, "rustc");
+        File rustc = getCompilerBinary(path);
+
         if (!rustc.exists()) {
             LOG.error(rustc.getAbsolutePath() + " does not exist");
             return null;

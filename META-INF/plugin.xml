@@ -45,10 +45,11 @@
       <moduleType id="RUST_MODULE" implementationClass="vektah.rust.ide.module.RustModuleType" classpathProvider="true"/>
       <moduleConfigurationEditorProvider implementation="vektah.rust.ide.module.RustModuleEditorsProvider"/>
 
+      <compiler implementation="vektah.rust.ide.compilation.RustCompiler"/>
+      <compileServer.plugin classpath="jps/jps-plugin.jar"/>
+
       <programRunner implementation="vektah.rust.ide.runner.RustRunner"/>
       <configurationType implementation="vektah.rust.ide.runner.RustConfigurationType"/>
-
-      <projectService serviceInterface="com.intellij.openapi.compiler.CompilerManager" serviceImplementation="vektah.rust.ide.builder.RustCompilerManager" overrides="true"/>
   </extensions>
 
   <application-components>

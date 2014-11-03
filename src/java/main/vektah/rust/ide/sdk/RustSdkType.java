@@ -13,12 +13,14 @@ import vektah.rust.RustIcons;
 import vektah.rust.i18n.RustBundle;
 
 import javax.swing.*;
+import java.io.File;
 
 public class RustSdkType extends SdkType {
+    public static final String RUST_SDK_TYPE_ID = "Rust SDK";
 	private RustSdkData sdkData;
 
 	public RustSdkType() {
-		super(RustBundle.message("sdk.name.rust"));
+		super(RUST_SDK_TYPE_ID);
 	}
 
 	public static RustSdkType getInstance() {
