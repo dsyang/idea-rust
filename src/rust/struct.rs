@@ -3,15 +3,20 @@ struct Point {
     y: f64
 }
 
-pub struct Bar {
+pub struct Bar<T> {
     // blah
     #[doc(hidden)]
-    field: int,
+    field: T,
     #[doc(hidden)]
     field2: int,
 }
 
 pub struct NoExpand<'t>(pub &'t str);
+
+pub struct LifetimeBound<'a, T:'a> {
+    items: &'a mut [Bar<T>],
+    weight_range: Bar<uint>
+}
 
 // Declare a public enum with two public variants
 pub enum State {

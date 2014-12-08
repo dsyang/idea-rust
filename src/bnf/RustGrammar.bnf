@@ -337,8 +337,8 @@ lifetime ::= "'" (IDENTIFIER | 'static')
 
 // GENERIC PARAM LIST eg function<A>(...)
 generic_params ::= '<' generic_param (',' generic_param)* '>'
-private generic_param ::= lifetime | IDENTIFIER  [(':' | '=') (type | region_bound) ('+' (type | region_bound))* ]
-region_bound ::= "'" 'static'
+private generic_param ::= lifetime | IDENTIFIER  [(':' | '=') (type | lifetime_bound) ('+' (type | lifetime_bound))* ]
+lifetime_bound ::= lifetime
 
 // GENERIC TYPES eg Option<Foo>
 generic ::= '<' (generic_without_lifetime | generic_with_lifetime) '>'
