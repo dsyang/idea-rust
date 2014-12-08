@@ -1,6 +1,8 @@
 pub fn main() {
     'c';
     '\'';
+    b'y';
+    b'\x23';
 
 
     "asdf";
@@ -10,12 +12,16 @@ pub fn main() {
     "\u0A4f";
     "\uBEEFCAFE";
     "soe\\path\\to\\hello.txt";
+    b"bytestring";
+    b"aa\t\n";
 
     "\r";
     "イロハニホヘト チリヌルヲ ワカヨタレソ ツネ";
 
     r"foo";
     r##"foo #"# bar"##;
+    br##"raw"##;
+    br###"w #"# ##""## w"###;
 
     123; 0xff00;                       // type determined by program context
                                        // defaults to int in absence of type

@@ -125,7 +125,7 @@ itemName ::= IDENTIFIER
 
 // AGGREGATE TYPES
 private numeric_literal ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
-private string_literal ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
+private string_literal ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT | BYTE_STRING_LIT | RAW_BYTE_STRING_LIT | BYTE_LIT
 private literal ::= string_literal | numeric_literal | 'true' | 'false' | 'self' | unit
 private unit ::= ref? '(' ')'
 private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
@@ -307,7 +307,7 @@ private macro_wildcard ::= KW_AS | KW_BREAK | KW_CRATE | KW_ELSE | KW_ENUM | KW_
 	| BITWISE_XOR | DOUBLE_COLON | COLON | PLUS | MINUS | MULTIPLY | DIVIDE | REMAINDER | EQUAL | ASSIGN | NOT_EQUAL
 	| LESS_THAN_OR_EQUAL | LESS_THAN | GREATER_THAN_OR_EQUAL | GREATER_THAN | NOT | BOX | AT | SINGLE_QUOTE | DOLLAR
 	| HASH | COMMA | BAD_CHARACTER | RAW_STRING_LIT | ASSIGN_RIGHT_SHIFT | ASSIGN_LEFT_SHIFT | DOUBLE_DOT | TRIPLE_DOT
-	| BLOCK_COMMENT | BLOCK_DOC_COMMENT
+	| BLOCK_COMMENT | BLOCK_DOC_COMMENT | BYTE_LIT | BYTE_STRING_LIT | RAW_BYTE_STRING_LIT
 
 // Builtin expressions
 private builtin_expression_group ::= expr_continue | expr_break

@@ -19,6 +19,7 @@ import vektah.rust.psi.RustTokens;
 	private int raw_string_hashes;
 	private int comment_depth;
 	private boolean doc_comment;
+	private boolean raw_byte_string;
 %}
 
 WHITE_SPACE = [\ \t\n\r]
@@ -93,7 +94,10 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
 	"//" [^\n\r]*                                   { yybegin(YYINITIAL); return RustTokens.LINE_COMMENT; }
 	{CHAR}                                          { yybegin(YYINITIAL); return RustTokens.CHAR_LIT; }
 	{STRING}                                        { yybegin(YYINITIAL); return RustTokens.STRING_LIT; }
-	"r" "#"* {DOUBLE_QUOTE}                         { yybegin(IN_RAW_STRING); start_raw_string = zzStartRead; raw_string_hashes = yytext().length() - 1; }
+	"b" {CHAR}                                      { yybegin(YYINITIAL); return RustTokens.BYTE_LIT; }
+	"b" {STRING}                                    { yybegin(YYINITIAL); return RustTokens.BYTE_STRING_LIT; }
+	"r" "#"* {DOUBLE_QUOTE}                         { yybegin(IN_RAW_STRING); start_raw_string = zzStartRead; raw_string_hashes = yytext().length() - 1; raw_byte_string = false; }
+	"br" "#"* {DOUBLE_QUOTE}                        { yybegin(IN_RAW_STRING); start_raw_string = zzStartRead; raw_string_hashes = yytext().length() - 2; raw_byte_string = true; }
 
 	{BIN_LIT}                                       { yybegin(YYINITIAL); return RustTokens.BIN_LIT; }
 	{OCT_LIT}                                       { yybegin(YYINITIAL); return RustTokens.OCT_LIT; }
@@ -178,12 +182,12 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
 			}
 			yybegin(YYINITIAL);
 			zzStartRead = start_raw_string;
-			return RustTokens.RAW_STRING_LIT;
+			return raw_byte_string ? RustTokens.RAW_BYTE_STRING_LIT : RustTokens.RAW_STRING_LIT;
 		} else {
 			yybegin(IN_RAW_STRING);
 		}
 	}
 	[^\"]   { yybegin(IN_RAW_STRING); }
-	<<EOF>> { yybegin(YYINITIAL); zzStartRead = start_raw_string; return RustTokens.RAW_STRING_LIT; }
+	<<EOF>> { yybegin(YYINITIAL); zzStartRead = start_raw_string; return raw_byte_string? RustTokens.RAW_BYTE_STRING_LIT : RustTokens.RAW_STRING_LIT; }
 	.       { yybegin(IN_RAW_STRING); }
 }
