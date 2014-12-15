@@ -319,7 +319,7 @@ expr_break ::= 'break' lifetime?
 expr_path ::= '::'? ('self' '::' | 'super' '::')* IDENTIFIER ('::' (IDENTIFIER | generic))*
 type ::= type_basic | type_vector | type_tuple | type_closure | type_function | type_proc | type_unit
 
-private type_modifiers ::= ( ref | lifetime | '*' | 'mut' | '*' 'mut' | '@' | '~' | '$' | 'box')*
+private type_modifiers ::= ( ref | lifetime | raw | '@' | '~' | '$' | 'box')*
 type_basic ::= type_modifiers type_path
 type_vector ::= type_modifiers '[' type [',' '..' expr] ']'
 type_tuple ::= ref? '(' 'ref'? type (',' 'ref'? type)* ','? ')'
@@ -331,7 +331,8 @@ type_proc ::= 'proc' trait_bounds? fn_prototype_args trait_bounds? ['->' return_
 type_unit ::= ref? '*'? 'mut'? '@'? '(' ')'
 
 private type_path ::= '::'? ('self' '::' | 'super' '::')* IDENTIFIER ('::' IDENTIFIER)* '::'? generic? trait_bounds?
-ref ::= '&'+ lifetime?
+ref ::= '&'+ ('mut' | lifetime)?
+raw ::= '*'+ ('mut' | 'const')?
 lifetime ::= "'" (IDENTIFIER | 'static')
 
 
