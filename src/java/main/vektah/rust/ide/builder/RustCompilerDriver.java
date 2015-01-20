@@ -81,7 +81,7 @@ public class RustCompilerDriver {
 
 		saveAndCommit(isUnitTestMode);
 
-		final CompileContextImpl compileContext = new CompileContextImpl(myProject, compileTask, scope, null, !isRebuild && !forceCompile, isRebuild);
+		final CompileContextImpl compileContext = new CompileContextImpl(myProject, compileTask, scope, !isRebuild && !forceCompile, isRebuild);
 
 		executeCompileTask(scope, isRebuild, forceCompile, callback, message, checkCachesVersion, compileTask, compileContext);
 	}

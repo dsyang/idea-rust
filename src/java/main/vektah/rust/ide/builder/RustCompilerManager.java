@@ -14,7 +14,7 @@ public class RustCompilerManager extends CompilerManagerImpl {
 	private final CompilationStatusListener myEventPublisher;
 
 	public RustCompilerManager(Project project, CompilerConfigurationImpl compilerConfiguration, MessageBus messageBus) {
-		super(project, compilerConfiguration, messageBus);
+		super(project, messageBus);
 
 		this.project = project;
 		this.myEventPublisher = messageBus.syncPublisher(CompilerTopics.COMPILATION_STATUS);
